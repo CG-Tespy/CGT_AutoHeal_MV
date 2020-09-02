@@ -46,9 +46,4 @@ webpage links.
 import { AutoHeal } from './AutoHeal/_CGT_AutoHeal_MV_Setup';
 
 // @ts-ignore
-if (window.CGT == null)
-    // @ts-ignore
-    window.CGT = {};
-
-// @ts-ignore
 window.CGT.AutoHeal = AutoHeal;

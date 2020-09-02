@@ -1,4 +1,4 @@
-import { PluginParams } from '../Shared';
+import { PluginParams } from '../../Shared';
 import { HealWithItems } from './HealWithItems';
 import { HealWithSkills } from './HealWithSkills';
 

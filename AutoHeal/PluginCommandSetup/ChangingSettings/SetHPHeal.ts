@@ -1,4 +1,4 @@
-import { PluginParams } from '../Shared';
+import { PluginParams } from '../../Shared';
 
 export let commandName = "CGT_AutoHeal_SetHPHeal";
 
@@ -9,5 +9,5 @@ export function SetHPHeal(args: string[])
     let boolString = args[0].toLowerCase();
     let shouldHealHp = boolString === 'true';
 
-    pluginParams.healHp = shouldHealHp;
+    pluginParams.healHP = shouldHealHp;
 }

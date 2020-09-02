@@ -1,10 +1,10 @@
-import { PluginParams } from '../Shared';
+import { PluginParams } from '../../Shared';
 
 export function HealWithItems()
 {
     let pluginParams = PluginParams();
 
-    if (pluginParams.healHp)
+    if (pluginParams.healHP)
         HealHP();
 
     if (pluginParams.healMp)
@@ -32,7 +32,7 @@ function SortedByHPHealing(items: RPG.Item[])
     return sorted;
 }
 
-let RPGItemEx = CGT.Core.Extensions.Items.RPGItemEx;
+let RPGItemEx = CGT.Core.Extensions.RPGItemEx;
 
 function SortAscending(firstItem: RPG.Item, secondItem: RPG.Item)
 {
@@ -45,42 +45,15 @@ function SortAscending(firstItem: RPG.Item, secondItem: RPG.Item)
     return healDiff;
 }
 
-// This goes by the flat amount first, then the percent amount.
-// This assumes the item has any hp-healing effects.
-function FlatHPAmountHealed(item: RPG.Item): number
-{
-    let healEffects = HealEffects.OfItem(item);
-    let flatAmount = 0;
-    
-    for (let eff of healEffects.hp)
-    {
-        flatAmount += eff.value2;
-    }
-
-    return flatAmount;
-}
-
-let HealEffects = CGT.Core.Extensions.Items.HealEffects;
-
-function PercentHPAmountHealed(item: RPG.Item): number
-{
-    let healEffects = HealEffects.OfItem(item);
-    let percentAmount = 0;
-    
-    for (let eff of healEffects.hp)
-    {
-        percentAmount += eff.value1;
-    }
-
-    return percentAmount;
-}
+let FlatHPAmountHealed = RPGItemEx.FlatHPAmountHealed;
+let PercentHPAmountHealed = RPGItemEx.PercentHPAmountHealed;
 
 function HealPartyMember(member: Game_Actor, healingItems: RPG.Item[]): void
 {
     while (!MemberAtFullHP(member) && AvailableHealingItemsAreIn(healingItems))
     {
         let item = GetFirstAvailableHealingItem(healingItems);
-        RPGItemEx.UseItemOnPartyMember(item, member);
+        RPGItemEx.UseItemOnActor(item, member);
     }
 }
 
@@ -106,6 +79,7 @@ function GetFirstAvailableHealingItem(healingItems: RPG.Item[])
 
     return null;
 }
+
 
 function HealMP()
 {

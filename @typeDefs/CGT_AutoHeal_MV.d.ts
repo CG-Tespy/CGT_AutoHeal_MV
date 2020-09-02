@@ -7,7 +7,7 @@ declare namespace CGT
         let PluginParams:
         {
             /** Whether or not to heal HP */
-            healHp: boolean,
+            healHP: boolean,
             /** Whether or not to heal MP */
             healMp: boolean,
             /** Whether or not to use items */
@@ -20,13 +20,28 @@ declare namespace CGT
             afterHealingActions: RPG.CommonEvent[],
             paramNames:
             {
-                healHp: string,
+                healHP: string,
                 healMp: string,
                 useItems: string,
                 useSkills: string,
                 actionsBeforeHealing: string,
                 actionsAfterHealing: string,
             },
+        };
+
+        let healingItems: Array<HealApplier>;
+        let healingSkills: Array<HealApplier>;
+
+        class HealApplier
+        {
+            get Priority(): number
+            get BaseObject(): RPG.Item | RPG.Skill
+
+            set Priority(value: number)
+            set BaseObject(value: RPG.Item | RPG.Skill)
+
+            constructor(baseObject: RPG.Item | RPG.Skill, priority: number)
+
         }
 
     }

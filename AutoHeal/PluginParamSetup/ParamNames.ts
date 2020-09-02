@@ -1,6 +1,6 @@
 export const paramNames = 
 {
-    healHp: 'Heal HP',
+    healHP: 'Heal HP',
     healMp: 'Heal MP',
     useItems: 'Use Items',
     useSkills: 'Use Skills',
