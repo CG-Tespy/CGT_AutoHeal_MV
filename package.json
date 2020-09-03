@@ -1,6 +1,6 @@
 {
   "name": "cgt-instant-heal-mv",
-  "version": "0.5.1",
+  "version": "0.5.3",
   "description": "Allows you to implement a feature that automatically uses party skills and items, to bring your party members to full HP and/or MP",
   "main": "CGT_AutoHeal_MV.js",
   "dependencies": {

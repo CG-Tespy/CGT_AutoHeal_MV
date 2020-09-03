@@ -12,5 +12,10 @@ export let priorityTagRegex = new RegExp(`${priorityTag}\\b\\d+`);
 
 export function SortByPriority(firstApplier: HealApplier, secondApplier: HealApplier): number
 {
-    return firstApplier.Priority - secondApplier.Priority;
+    return secondApplier.Priority - firstApplier.Priority;
 }
+
+let Game_ActorEx = CGT.Core.Extensions.Game_ActorEx;
+
+export let IsAtFullHP = Game_ActorEx.IsAtFullHP;
+export let IsAtFullMP = Game_ActorEx.IsAtFullMP;

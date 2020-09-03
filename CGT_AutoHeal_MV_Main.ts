@@ -1,6 +1,6 @@
 /*:
 
-@plugindesc Version 0.05.01. Adds functionality that makes the system use party skills and/or items to fully heal party members.
+@plugindesc Version 0.05.03. Adds functionality that makes the system use party skills and/or items to fully heal party members.
 
 @author CG-Tespy - https://github.com/CG-Tespy
 

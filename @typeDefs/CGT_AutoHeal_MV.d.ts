@@ -30,7 +30,12 @@ declare namespace CGT
         };
 
         let healingItems: Array<HealApplier>;
+        let hpHealingItems: Array<HealApplier>;
+        let mpHealingItems: Array<HealApplier>;
+
         let healingSkills: Array<HealApplier>;
+        let hpHealingSkills: Array<HealApplier>;
+        let mpHealingSkills: Array<HealApplier>;
 
         class HealApplier
         {

@@ -1,4 +1,4 @@
-import { PluginParams, SortByPriority } from '../../Shared';
+import { PluginParams, SortByPriority, IsAtFullHP, IsAtFullMP } from '../../Shared';
 
 export function HealWithSkills()
 {
@@ -55,7 +55,7 @@ function UseSkillToHealParty(user: Game_Actor, skill: RPG.Skill)
     for (let member of $gameParty.aliveMembers())
     {
         // To make sure the member's healed fully if possible
-        while (CanPayCost(user, skill) && !IsFullyHealed(member))
+        while (CanPayCost(user, skill) && !IsAtFullHP(member))
         {
             UseSkillOnActor(skill, user, member);
         }
@@ -69,7 +69,6 @@ let CanPayCost = Game_ActorEx.CanPaySkillCost.bind(Game_ActorEx);
 let RPGSkillEx = CoreExt.RPGSkillEx;
 let UseSkillOnActor = RPGSkillEx.UseSkillOnActor.bind(RPGSkillEx);
 
-let IsFullyHealed = Game_ActorEx.IsAtFullHP.bind(Game_ActorEx);
 
 function HealMP()
 {

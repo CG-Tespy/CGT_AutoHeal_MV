@@ -273,7 +273,11 @@ declare namespace CGT
 
                 static HPHealingItemsIn(items: RPG.Item[]): RPG.Item[]
 
+                /** Returns whether the item's damage type is HP Recovery. */
                 static CanHealHP(item: RPG.Item): boolean
+
+                /** Returns whether the item's damage type is MP Recovery. */
+                static CanHealMP(item: RPG.Item): boolean
 
                 static FlatHPAmountHealed(item: RPG.Item): number
 
@@ -295,6 +299,12 @@ declare namespace CGT
              */
             class RPGSkillEx
             {
+                /** Returns whether the skill's damage type is HP Recovery. */
+                static CanHealHP(item: RPG.Skill): boolean
+
+                /** Returns whether the skill's damage type is MP Recovery. */
+                static CanHealMP(item: RPG.Skill): boolean
+
                 static OnlyHealsHP(skill: RPG.Skill): boolean
                 /**
                  * Returns false if the skill is not single-targeting, or if
@@ -665,9 +675,9 @@ declare namespace CGT
             }
 
             /**
-             * For effects that recover HP, MP, or TP.
-             */
-            export class HealEffect extends UseEffect
+            * For effects that recover HP, MP, or TP.
+            */
+            class HealEffect extends UseEffect
             {
                 get PercentRecovery(): number
                 get FlatRecovery(): number
@@ -684,7 +694,7 @@ declare namespace CGT
             /**
              * Encapsulates basic healing effects involving, HP, MP, or TP
              */
-            export class HealEffectSet
+            class HealEffectSet
             {
                 hp: HealEffect[];
                 mp: HealEffect[];
@@ -715,12 +725,43 @@ declare namespace CGT
                 
             }
 
+            enum DamageType
+            {
+                None = 0,
+                HPDamage = 1,
+                MPDamage = 2,
+                HPRecovery = 3,
+                MPRecovery = 4,
+                HPDrain = 5,
+                MPDrain = 6
+            }
+
+            /** Targeting scope of skills and items. */
+            enum Scope
+            {
+                None = 0, 
+
+                OneEnemy = 1, 
+                AllEnemies = 2, 
+
+                OneRandEnemy = 3, 
+                TwoRandEnemy = 4, 
+                ThreeRandEnemy = 5, 
+                FourRandEnemy = 6,
+
+                OneAlly = 7,
+                AllAllies = 8,
+                OneAllyDead = 9,
+                AllAlliesDead = 10,
+
+                TheUser = 11
+            }
 
             namespace Item
             {
                 
 
-                export enum ItemType
+                enum ItemType
                 {
                     Regular = 1, 
                     Key = 2, 
@@ -730,21 +771,7 @@ declare namespace CGT
 
                 
 
-                export enum ItemOccasion
-                {
-                    Always = 0, 
-                    BattleOnly = 1, 
-                    MenuOnly = 2, 
-                    Never = 3
-                }
-
-                export enum ItemCategory
-                {
-                    Healing, 
-                    Damage, 
-                }
-
-                export enum ItemScope
+                enum ItemScope
                 {
                     None = 0, 
 
@@ -764,18 +791,9 @@ declare namespace CGT
                     TheUser = 11
                 }
 
-                export enum DamageType
-                {
-                    None,
-                    HPDamage,
-                    MPDamage,
-                    HPRecover,
-                    MPRecover,
-                    HPDrain,
-                    MPDrain
-                }
+                
 
-                export enum HitType
+                enum HitType
                 {
                     Null = -1,
                     CertainHit = 0,
@@ -788,7 +806,7 @@ declare namespace CGT
              * Wrapper for MV's Effect class, which represents effects
              * you can set up in an Item's or Skill's effect settings.
              */
-            export class UseEffect implements RPG.Effect
+            class UseEffect implements RPG.Effect
             {
                 code: number;
                 dataId: number;
@@ -807,7 +825,7 @@ declare namespace CGT
              * The values are based off the codes the effect types are assigned
              * in the base Effect class.
              */
-            export enum EffectType
+            enum EffectType
             {
                 Null = -1,
                 HPHeal = 11,
@@ -897,6 +915,8 @@ declare namespace CGT
 
             function GetScaleFactor(firstWidth: number, firstHeight: number, 
                 secondWidth: number, secondHeight: number): number;
+
+            
 
         }
 
