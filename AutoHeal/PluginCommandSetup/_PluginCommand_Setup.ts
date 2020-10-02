@@ -1,10 +1,8 @@
-import { ApplyHeal, commandName as applyHealCommandName } from './ApplyingHeals/ApplyHeal';
-import { HealWithItems, itemHealCommandName } from './ApplyingHeals/HealWithItems';
-import { HealWithSkills, skillHealCommandName } from './ApplyingHeals/HealWithSkills';
+import { HealWithItems, commandName as itemHealCommandName } from './ApplyingHeals/HealWithItems';
+import { HealWithSkills, commandName as skillHealCommandName } from './ApplyingHeals/HealWithSkills';
 
 let commands = new Map(
     [
-        [applyHealCommandName, ApplyHeal],
         [itemHealCommandName, HealWithItems],
         [skillHealCommandName, HealWithSkills]
     ]

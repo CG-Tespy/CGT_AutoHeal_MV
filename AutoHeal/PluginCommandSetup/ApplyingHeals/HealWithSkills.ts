@@ -3,7 +3,8 @@ import { HealApplier } from '../../Structures/HealApplier';
 import { HealSource } from '../../Structures/HealSource';
 import { HealApplierArgs } from '../../Structures/HealApplierArgs';
 import { SkillHealApplier } from '../../Structures/SkillHealApplier';
-export let skillHealCommandName = "CGT_AutoHeal_ApplyHeal_Skills";
+
+export let commandName = "CGT_AutoHeal_ApplyHeal_Skills";
 
 SetThingsUpWhenTitleScreenStarts();
 

@@ -9,7 +9,7 @@ import
     ArgsDemandMPHeal, 
 } from '../../Shared';
 
-export let itemHealCommandName = "CGT_AutoHeal_ApplyHeal_Items";
+export let commandName = "CGT_AutoHeal_ApplyHeal_Items";
 
 SetThingsUpWhenTitleScreenStarts();
 

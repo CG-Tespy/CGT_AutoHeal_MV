@@ -20,7 +20,7 @@ export function HealingSourcesIn(databaseContents: HasNotetag[]): HealSource[]
         if (isForSystem)
         {
             let priority = GetPriorityOf(source);
-            let toRegister = new HealSource(source, priority);
+            let toRegister = new HealSource(source);
             healSources.push(toRegister);
         }
     }

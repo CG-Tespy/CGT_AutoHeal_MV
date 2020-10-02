@@ -7,7 +7,7 @@ let ArrayEx = CGT.Core.Extensions.ArrayEx;
 /**
  * Abstract class containing hooks for different types of heal-appliers.
  */
-export class HealApplier
+export abstract class HealApplier
 {
     Apply(): void
     {
@@ -50,6 +50,7 @@ export class HealApplier
     }
 
     protected usableSources: HealSource[] = []
+    /** All sources this type of heal applier is allowed to use. */
     healSources: HealSource[] = []
     
     protected IsUsable(source: HealSource): boolean
