@@ -6,6 +6,8 @@ export let commandName = "CGT_AutoHeal_ApplyHeal";
 
 export function ApplyHeal(args: string[])
 {
+    // TODO: Deprecate this func
+    /*
     let pluginParams = PluginParams();
 
     if (pluginParams.useItems)
@@ -13,4 +15,5 @@ export function ApplyHeal(args: string[])
 
     if (pluginParams.useSkills)
         HealWithSkills();
+        */
 }   

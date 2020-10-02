@@ -4,49 +4,36 @@ declare namespace CGT
     {
         let version: number;
 
-        let PluginParams:
+        let healingItems: HealSource[];
+        let hpHealingItems: HealSource[];
+        let mpHealingItems: HealSource[];
+
+        let healingSkills: HealSource[];
+        let hpHealingSkills: HealSource[];
+        let mpHealingSkills: HealSource[];
+
+        /**
+         * For items and skills registered as usable by the system.
+         */
+        class HealSource
         {
-            /** Whether or not to heal HP */
-            healHP: boolean,
-            /** Whether or not to heal MP */
-            healMp: boolean,
-            /** Whether or not to use items */
-            useItems: boolean,
-            /** Whether or not to use skills */
-            useSkills: boolean,
-            /** Common Events to execute before the healing happens */
-            beforeHealingActions: RPG.CommonEvent[],
-            /** Common Events to execute after the healing happens */
-            afterHealingActions: RPG.CommonEvent[],
-            paramNames:
-            {
-                healHP: string,
-                healMp: string,
-                useItems: string,
-                useSkills: string,
-                actionsBeforeHealing: string,
-                actionsAfterHealing: string,
-            },
-        };
+            /** Whether or not this source heals HP. */
+            get HealsHP(): boolean
 
-        let healingItems: Array<HealApplier>;
-        let hpHealingItems: Array<HealApplier>;
-        let mpHealingItems: Array<HealApplier>;
+            /** Whether or not this source heals MP. */
+            get HealsMP(): boolean
 
-        let healingSkills: Array<HealApplier>;
-        let hpHealingSkills: Array<HealApplier>;
-        let mpHealingSkills: Array<HealApplier>;
+            /** Whether or not this source targets all allies. */
+            get TargetsAll(): boolean
 
-        class HealApplier
-        {
+            /** The higher this is, the sooner the system uses it before others. */
             get Priority(): number
-            get BaseObject(): RPG.Item | RPG.Skill
-
             set Priority(value: number)
-            set BaseObject(value: RPG.Item | RPG.Skill)
 
-            constructor(baseObject: RPG.Item | RPG.Skill, priority: number)
-
+            get BaseObject(): RPG.UsableItem
+            set BaseObject(value: RPG.UsableItem)
+            
+            constructor(baseObject: RPG.UsableItem, priority: number)
         }
 
     }

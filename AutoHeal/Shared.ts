@@ -1,21 +1,44 @@
-import { HealApplier } from "./Structures/HealApplier";
+import { HealSource } from "./Structures/HealSource";
 
-// The params might not be initialized when this part of the API is, so
-// we can't just have each file point immediately to the params and expect things to work.
-// The params should be ready whenever any of the commands execute, though, so yeah.
-export function PluginParams() { return CGT.AutoHeal.PluginParams; }
-
+/** Defines something as usable by the system. */
 export let usableTag = "CGT_AutoHeal_Usable";
+/** For setting a priority value. */
 export let priorityTag = "CGT_AutoHeal_Priority";
 
-export let priorityTagRegex = new RegExp(`${priorityTag}\\b\\d+`);
+/** For finding priority tags. */
+export let priorityTagRegex = new RegExp(`${priorityTag}\\s\\d+`);
 
-export function SortByPriority(firstApplier: HealApplier, secondApplier: HealApplier): number
+export function SortByPriority(firstSource: HealSource, secondSource: HealSource): number
 {
-    return secondApplier.Priority - firstApplier.Priority;
+    return secondSource.Priority - firstSource.Priority;
 }
 
-let Game_ActorEx = CGT.Core.Extensions.Game_ActorEx;
+let ArrayEx = CGT.Core.Extensions.ArrayEx;
 
-export let IsAtFullHP = Game_ActorEx.IsAtFullHP;
-export let IsAtFullMP = Game_ActorEx.IsAtFullMP;
+export function ArgsDemandHPHeal(args: string[])
+{
+    return ArrayEx.Includes(args, validCommandArgs.healHP);
+}
+
+export function ArgsDemandMPHeal(args: string[])
+{
+    return ArrayEx.Includes(args, validCommandArgs.healMP);
+}
+
+/**
+ * Converts all of the passed arr's contents to uppercase.
+ * @param arr 
+ */
+export function MakeUppercase(arr: string[])
+{
+    for (let i = 0; i < arr.length; i++)
+    {
+        arr[i] = arr[i].toUpperCase();
+    }
+}
+
+export let validCommandArgs = 
+{
+    healHP: "HP",
+    healMP: "MP"
+};

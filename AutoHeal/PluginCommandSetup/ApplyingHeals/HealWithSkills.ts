@@ -1,76 +1,73 @@
-import { PluginParams, SortByPriority, IsAtFullHP, IsAtFullMP } from '../../Shared';
+import { MakeUppercase, ArgsDemandHPHeal, ArgsDemandMPHeal } from '../../Shared';
+import { HealApplier } from '../../Structures/HealApplier';
+import { HealSource } from '../../Structures/HealSource';
+import { HealApplierArgs } from '../../Structures/HealApplierArgs';
+import { SkillHealApplier } from '../../Structures/SkillHealApplier';
+export let skillHealCommandName = "CGT_AutoHeal_ApplyHeal_Skills";
 
-export function HealWithSkills()
+SetThingsUpWhenTitleScreenStarts();
+
+function SetThingsUpWhenTitleScreenStarts()
 {
-    let pluginParams = PluginParams();
+    let coreEngine = CGT.Core;
+    let callbacks = coreEngine.Utils.Callbacks;
+    let TitleScreenStart = callbacks.TitleScreenStart;
+    TitleScreenStart.AddListener(SetUpHealAppliers, this);
+}
 
-    if (pluginParams.healHP)
+let hpHealer: HealApplier = null;
+let mpHealer: HealApplier = null;
+
+function SetUpHealAppliers(): void
+{
+    let hpHealSources = <HealSource[]>CGT.AutoHeal.hpHealingSkills;
+    let currentHP = "hp", maxHP = "mhp";
+    hpHealer = CreateSkillApplier(currentHP, maxHP, hpHealSources);
+
+    let mpHealSources = <HealSource[]>CGT.AutoHeal.mpHealingSkills;
+    let currentMP = "mp", maxMP = "mmp";
+    mpHealer = CreateSkillApplier(currentMP, maxMP, mpHealSources);
+}
+
+function CreateSkillApplier(currentStat: string, 
+    maxStat: string, 
+    healSources: HealSource[]) : HealApplier
+{
+    let healerArgs = CreateSkillHealingArgs(currentStat, maxStat, healSources);
+    let healer = HealApplier.From(SkillHealApplier, healerArgs);
+    return healer;   
+}
+
+
+function CreateSkillHealingArgs(currentStat: string, 
+    maxStat: string, 
+    healSources: HealSource[]): HealApplierArgs
+{
+    let healerArgs = new HealApplierArgs();
+    healerArgs.CurrentStat = currentStat;
+    healerArgs.MaxStat = maxStat;
+    healerArgs.HealSources = healSources;
+    return healerArgs;
+}
+
+export function HealWithSkills(args: string[])
+{
+    // Make the args uppercase
+    MakeUppercase(args);
+
+    if (ArgsDemandHPHeal(args))
         HealHP();
-    
-    if (pluginParams.healMp)
+
+    if (ArgsDemandMPHeal(args))
         HealMP();
 }
 
 function HealHP()
 {
-    let aliveMembers = $gameParty.aliveMembers();
-
-    for (let member of aliveMembers)
-    {
-        MakeMemberHealParty(member);
-    }
+    hpHealer.Apply();
 }
-
-function MakeMemberHealParty(member: Game_Actor)
-{
-    let healingSkills = HealingSkillsHadBy(member);
-    healingSkills = healingSkills.sort(SortByPriority);
-
-    for (let i = 0; i < healingSkills.length; i++)
-    {
-        let skill = healingSkills[i];
-        UseSkillToHealParty(member, skill);
-    }
-
-}
-
-function HealingSkillsHadBy(member: Game_Actor)
-{
-    let result = [];
-    let validHealingSkills = CGT.AutoHeal.healingSkills;
-    // The valid skills are those designated as such in the notetags.
-
-    for (let skill of member.usableSkills())
-    {
-        for (let healingSkill of validHealingSkills)
-            if (healingSkill.BaseObject == skill)
-                result.push(skill);
-    }
-
-    return result;
-}
-
-function UseSkillToHealParty(user: Game_Actor, skill: RPG.Skill)
-{
-    for (let member of $gameParty.aliveMembers())
-    {
-        // To make sure the member's healed fully if possible
-        while (CanPayCost(user, skill) && !IsAtFullHP(member))
-        {
-            UseSkillOnActor(skill, user, member);
-        }
-    }
-}
-
-let CoreExt = CGT.Core.Extensions;
-let Game_ActorEx = CoreExt.Game_ActorEx;
-let CanPayCost = Game_ActorEx.CanPaySkillCost.bind(Game_ActorEx);
-
-let RPGSkillEx = CoreExt.RPGSkillEx;
-let UseSkillOnActor = RPGSkillEx.UseSkillOnActor.bind(RPGSkillEx);
-
 
 function HealMP()
 {
-    throw 'Not yet implemented, fool!';
+    mpHealer.Apply();
 }

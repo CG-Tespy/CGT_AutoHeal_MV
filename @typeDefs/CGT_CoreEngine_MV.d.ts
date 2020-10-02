@@ -267,6 +267,11 @@ declare namespace CGT
             {
                 static UseItemOnActor(itemInInventory: RPG.Item, actor: Game_Actor): void
 
+                /**
+                 * Uses the item on the actor without consuming it.
+                 */
+                static FreeUseItemOnActor(itemInInventory: RPG.Item, actor: Game_Actor): void
+
                 private static ApplyItemUseOnActor(itemUse: Game_Action): void
 
                 static ForceUseItemOnActor(item: RPG.Item, actor: Game_Actor): void
@@ -314,11 +319,25 @@ declare namespace CGT
                     target: Game_Actor): boolean
 
                 /**
+                 * Has the user cast the skill on the target without paying the cost.
+                 * Returns false if the skill isn't single-targeting, or if the user can't
+                 * legit use the skill. True otherwise.
+                 */
+                static FreeUseSkillOnActor(skill: RPG.Skill, user: Game_Actor, target: Game_Actor): boolean
+
+                /**
                  * Returns false if the user can't pay the cost for applying
                  * the skill to the targets. True otherwise.
                  */
                 static UseSkillOnActors(skill: RPG.Skill, user: Game_Actor, 
                     targets: Game_Actor[]): boolean
+
+                /**
+                 * Has the user cast the skill on each target, without paying the cost.
+                 * Returns false if the user can't use the skill legitimately.
+                 * True otherwise.
+                 */
+                static FreeUseSkillOnActors(skill: RPG.Skill, user: Game_Actor, targets: Game_Actor[]): boolean
                 
                 /**
                  * Returns true if the user can pay the skill cost the specified
@@ -716,8 +735,6 @@ declare namespace CGT
                  */
                 Register(eff: RPG.Effect): Boolean
 
-
-
                 /** Whether or not this has any effects registered. */
                 Any(): Boolean
 
@@ -915,8 +932,6 @@ declare namespace CGT
 
             function GetScaleFactor(firstWidth: number, firstHeight: number, 
                 secondWidth: number, secondHeight: number): number;
-
-            
 
         }
 

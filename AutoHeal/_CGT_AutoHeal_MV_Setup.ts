@@ -1,11 +1,10 @@
-import * as PluginParams from "./PluginParamSetup/_PluginParam_Setup";
+import './HealSourceSetup/_HealSources_Setup';
 import "./PluginCommandSetup/_PluginCommands_Setup";
-import './HealApplierSetup/_HealAppliers_Setup';
+
 
 export let AutoHeal =
 {
-    version: 0.10,
-    PluginParams: PluginParams,
+    version: 10101,
 
     // These arrays will be populated sometime after the initial plugin initialization
     healingItems: [],

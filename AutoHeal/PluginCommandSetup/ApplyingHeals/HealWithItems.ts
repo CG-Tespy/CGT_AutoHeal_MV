@@ -1,61 +1,79 @@
-import { PluginParams, IsAtFullHP, IsAtFullMP } from '../../Shared';
+import { HealSource } from '../../Structures/HealSource';
+import { HealApplierArgs } from '../../Structures/HealApplierArgs';
+import { HealApplier } from '../../Structures/HealApplier';
+import { ItemHealApplier } from '../../Structures/ItemHealApplier';
+import 
+{ 
+    MakeUppercase, 
+    ArgsDemandHPHeal,
+    ArgsDemandMPHeal, 
+} from '../../Shared';
 
-export function HealWithItems()
+export let itemHealCommandName = "CGT_AutoHeal_ApplyHeal_Items";
+
+SetThingsUpWhenTitleScreenStarts();
+
+function SetThingsUpWhenTitleScreenStarts()
 {
-    let pluginParams = PluginParams();
+    let coreEngine = CGT.Core;
+    let callbacks = coreEngine.Utils.Callbacks;
+    let TitleScreenStart = callbacks.TitleScreenStart;
+    TitleScreenStart.AddListener(SetUpHealAppliers, this);
+}
 
-    if (pluginParams.healHP)
+let hpHealer: HealApplier = null;
+let mpHealer: HealApplier = null;
+
+function SetUpHealAppliers(): void
+{
+    let hpHealSources = <HealSource[]>CGT.AutoHeal.hpHealingItems;
+    let currentHP = "hp", maxHP = "mhp";
+    hpHealer = CreateItemApplier(currentHP, maxHP, hpHealSources);
+
+    let mpHealSources = <HealSource[]>CGT.AutoHeal.mpHealingItems;
+    let currentMP = "mp", maxMP = "mmp";
+    mpHealer = CreateItemApplier(currentMP, maxMP, mpHealSources);
+
+}
+
+function CreateItemApplier(currentStat: string, 
+    maxStat: string, 
+    healSources: HealSource[]) : ItemHealApplier
+{
+    let healerArgs = CreateItemHealingArgs(currentStat, maxStat, healSources);
+    let healer = HealApplier.From(ItemHealApplier, healerArgs);
+    return healer;   
+}
+
+
+function CreateItemHealingArgs(currentStat: string, 
+    maxStat: string, 
+    healSources: HealSource[]): HealApplierArgs
+{
+    let healerArgs = new HealApplierArgs();
+    healerArgs.CurrentStat = currentStat;
+    healerArgs.MaxStat = maxStat;
+    healerArgs.HealSources = healSources;
+    return healerArgs;
+}
+
+export function HealWithItems(args: string[])
+{
+    MakeUppercase(args);
+
+    if (ArgsDemandHPHeal(args))
         HealHP();
 
-    if (pluginParams.healMp)
+    if (ArgsDemandMPHeal(args))
         HealMP();
 }
 
 function HealHP()
 {
-    // Go through each alive party member, healing them up to full if possible
-    let partyMembers = $gameParty.aliveMembers();
-
-    for (let member of partyMembers)
-    {
-        HealPartyMemberHP(member);
-    }
+    hpHealer.Apply();
 }
-
-let RPGItemEx = CGT.Core.Extensions.RPGItemEx;
-let UseItemOnActor = RPGItemEx.UseItemOnActor.bind(RPGItemEx);
-
-function HealPartyMemberHP(member: Game_Actor): void
-{
-    while (!IsAtFullHP(member) && ThereAreHPHealingItemsLeft())
-    {
-        let item = GetFirstAvailableHPHealingItem();
-        UseItemOnActor(item, member);
-    }
-}
-
-function ThereAreHPHealingItemsLeft(): boolean
-{
-    for (let item of HPHealingItems())
-        if ($gameParty.hasItem(<RPG.Item>item.BaseObject, false))
-            return true;
-
-    return false;
-}
-
-function HPHealingItems() { return CGT.AutoHeal.hpHealingItems; }
-
-function GetFirstAvailableHPHealingItem(): RPG.Item
-{
-    for (let item of HPHealingItems())
-        if ($gameParty.hasItem(item.BaseObject, false))
-            return <RPG.Item>item.BaseObject;
-
-    return null;
-}
-
 
 function HealMP()
 {
-    throw 'Not yet implemented!';
+    mpHealer.Apply();
 }

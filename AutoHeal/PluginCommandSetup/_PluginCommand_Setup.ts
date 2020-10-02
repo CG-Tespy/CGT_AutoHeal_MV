@@ -1,12 +1,12 @@
 import { ApplyHeal, commandName as applyHealCommandName } from './ApplyingHeals/ApplyHeal';
-import { SetHPHeal, commandName as setHPHealCommandName } from './ChangingSettings/SetHPHeal';
-import { SetMPHeal, commandName as setMPHealCommandName } from './ChangingSettings/SetMPHeal';
+import { HealWithItems, itemHealCommandName } from './ApplyingHeals/HealWithItems';
+import { HealWithSkills, skillHealCommandName } from './ApplyingHeals/HealWithSkills';
 
 let commands = new Map(
     [
         [applyHealCommandName, ApplyHeal],
-        [setHPHealCommandName, SetHPHeal],
-        [setMPHealCommandName, SetMPHeal]
+        [itemHealCommandName, HealWithItems],
+        [skillHealCommandName, HealWithSkills]
     ]
 );
 

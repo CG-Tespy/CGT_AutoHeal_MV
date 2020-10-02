@@ -1,28 +1,30 @@
-import { HealingAppliersIn } from './HealingAppliersIn';
-import { SortByPriority } from '../Shared';
-import { HealApplier } from '../Structures/HealApplier';
+import { HealingSourcesIn } from './HealingSourcesIn';
+import { HealSource } from '../Structures/HealSource';
+
+// Goes through the database, creates HealSources for the parts the 
+// user set as usable by this system, and assigns said sources to
+// the system's public arrays.
 
 // Given how the database is loaded, the items and skills won't necessarily be
 // available as soon as this plugin starts up. So we need to wait for a time
 // when they'll definitely be set up: the title screen boot!
 let Callbacks = CGT.Core.Utils.Callbacks;
 let RightTimeToFetch = Callbacks.TitleScreenStart;
-RightTimeToFetch.AddListener(FetchAppliers, this);
+RightTimeToFetch.AddListener(FetchSources, this);
 
-function FetchAppliers()
+function FetchSources()
 {
-    FetchItemAppliers();
-    FetchSkillAppliers();
+    FetchItemSources();
+    FetchSkillSources();
 }
 
-function FetchItemAppliers()
+function FetchItemSources()
 {
-    let unsortedHealingItems = HealingAppliersIn($dataItems);
-    let healingItems = unsortedHealingItems.sort(SortByPriority);
-    CGT.AutoHeal.healingItems = healingItems;
-
+    let healingItems = HealingSourcesIn($dataItems);
     let hpHealingItems = ArrayEx.Filter(healingItems, CanHealHP, this);
     let mpHealingItems = ArrayEx.Filter(healingItems, CanHealMP, this);
+
+    CGT.AutoHeal.healingItems = healingItems;
     CGT.AutoHeal.hpHealingItems = hpHealingItems;
     CGT.AutoHeal.mpHealingItems = mpHealingItems;
 }
@@ -30,24 +32,23 @@ function FetchItemAppliers()
 let CoreExtensions = CGT.Core.Extensions;
 let ArrayEx = CoreExtensions.ArrayEx;
 
-function CanHealHP(applier: HealApplier)
+function CanHealHP(source: HealSource)
 {
-    return applier.HealsHP;
+    return source.HealsHP;
 }
 
-function CanHealMP(applier: HealApplier)
+function CanHealMP(source: HealSource)
 {
-    return applier.HealsMP;
+    return source.HealsMP;
 }
 
-function FetchSkillAppliers()
+function FetchSkillSources()
 {
-    let unsortedHealingSkills = HealingAppliersIn($dataSkills);
-    let healingSkills = unsortedHealingSkills.sort(SortByPriority);
-    CGT.AutoHeal.healingSkills = healingSkills;
-
+    let healingSkills = HealingSourcesIn($dataSkills);
     let hpHealingSkills = ArrayEx.Filter(healingSkills, CanHealHP, this);
     let mpHealingSkills = ArrayEx.Filter(healingSkills, CanHealMP, this);
+    
+    CGT.AutoHeal.healingSkills = healingSkills;
     CGT.AutoHeal.hpHealingSkills = hpHealingSkills;
     CGT.AutoHeal.mpHealingSkills = mpHealingSkills;
 }
